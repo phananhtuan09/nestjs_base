@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LoggerModule } from './Logger/logger.module';
+import { LoggerModule } from './logger/logger.module';
 import { DatabaseModule } from './databases/typeorm/typeorm.module';
 import { ResponseHandlerModule } from './responseHandler/responseHandler.module';
 

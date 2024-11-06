@@ -11,33 +11,30 @@ import {
 import { UserService } from './user.service';
 import { User } from '~/shared/entities/user.entity';
 import { ICommonResponse } from '~/common/types/response/common.type';
+import { CreateUserDto, UpdateUserDto, FilterUserDto } from './dto/user.dto';
+
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
   async getUsers(
-    @Query('name') name?: string,
-    @Query('email') email?: string,
-    @Query('age') age?: number,
+    @Query() filters: FilterUserDto,
   ): Promise<ICommonResponse<User[]>> {
-    const filters = {
-      name,
-      email,
-      age: age ? Number(age) : undefined, // Convert age to a number if it's provided
-    };
     return await this.userService.getUsers(filters);
   }
 
   @Post()
-  async createUser(@Body() userData: Partial<User>): Promise<User> {
+  async createUser(
+    @Body() userData: CreateUserDto,
+  ): Promise<ICommonResponse<User>> {
     return await this.userService.createUser(userData);
   }
 
   @Put(':id')
   async updateUser(
     @Param('id') id: number,
-    @Body() updateData: Partial<User>,
+    @Body() updateData: UpdateUserDto,
   ): Promise<void> {
     await this.userService.updateUser(id, updateData);
   }
