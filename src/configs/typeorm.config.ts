@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { getEnvValue, isDev } from '~/common/utils/env.util';
+import { getEnvValue, isDev } from '../common/utils/env.util';
 import { ConfigType, registerAs } from '@nestjs/config';
 
 export const databaseRegToken = 'database';

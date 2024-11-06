@@ -8,7 +8,6 @@ const dataSourcePath = path.join(
   __dirname,
   '..',
   '..',
-  '..',
   'configs',
   'typeormDataSource.config.ts',
 );
@@ -16,13 +15,14 @@ const dataSourcePath = path.join(
 const args = process.argv.slice(2);
 const action = args[0]; // create, generate, run, revert, show
 const env = args[1]; // e.g., dev, prod
-const migrationName = args[2];
+const migrationName = args[2] || 'migration';
 
-const prefixCommand = 'typeorm-ts-node-commonjs ';
+const prefixCommand = ' typeorm-ts-node-commonjs ';
 
 const actionCommands = {
   create: 'migration:create src/migrations/' + migrationName,
-  generate: 'migration:generate src/migrations -d ' + dataSourcePath,
+  generate:
+    `migration:generate src/migrations/${migrationName} -d ` + dataSourcePath,
   run: 'migration:run  -d ' + dataSourcePath,
   revert: 'migration:revert  -d ' + dataSourcePath,
   show: 'migration:show -d ' + dataSourcePath,
@@ -54,7 +54,8 @@ let finalCommand =
 
 try {
   execSync(`${finalCommand}`, { stdio: 'inherit' });
+  console.log('Run command:', finalCommand);
 } catch (error) {
-  console.error('Error executing command:', error.message);
+  console.error('Error executing command:', error);
   process.exit(1);
 }
