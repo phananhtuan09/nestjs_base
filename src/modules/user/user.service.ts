@@ -5,12 +5,15 @@ import { User } from '~/shared/entities/user.entity';
 import { ResponseHandlerService } from '~/shared/responseHandler/responseHandler.service';
 import { ICommonResponse } from '~/common/types/response/common.type';
 import { CreateUserDto, UpdateUserDto, FilterUserDto } from './dto/user.dto';
+import { I18nService } from '~/shared/i18n/i18n.service';
+import { I18nReturnType } from '~/shared/i18n/i18n.interface';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly responseHandler: ResponseHandlerService,
+    private readonly i18nService: I18nService,
   ) {}
 
   async createUser(userData: CreateUserDto): Promise<ICommonResponse<User>> {
@@ -19,7 +22,7 @@ export class UserService {
       const savedUser = await this.userRepository.save(user);
       return this.responseHandler.success(
         savedUser,
-        'User created successfully',
+        this.i18nService.t<I18nReturnType<'common.about'>>('common.about'),
       );
     } catch (error) {
       throw new BadRequestException({
@@ -47,7 +50,10 @@ export class UserService {
         where,
       });
 
-      return this.responseHandler.success(users, 'List user');
+      return this.responseHandler.success(
+        users,
+        this.i18nService.t<I18nReturnType<'common.about'>>('common.about'),
+      );
     } catch (error) {
       throw new BadRequestException({
         message: 'Failed to get users',

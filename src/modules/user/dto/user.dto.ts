@@ -1,14 +1,17 @@
 import { IsString, IsEmail, IsOptional, IsInt, Min } from 'class-validator';
-import { PartialType, OmitType } from '@nestjs/swagger';
+import { PartialType, OmitType, ApiProperty } from '@nestjs/swagger';
 
-class BaseUserDto {
+export class BaseUserDto {
   @IsString()
+  @ApiProperty()
   username: string;
 
   @IsEmail()
+  @ApiProperty()
   email: string;
 
   @IsString()
+  @ApiProperty()
   password: string;
 }
 
@@ -22,5 +25,6 @@ export class FilterUserDto extends PartialType(
   @IsOptional()
   @IsInt()
   @Min(0)
+  @ApiProperty({ required: false })
   age?: number;
 }

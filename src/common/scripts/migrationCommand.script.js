@@ -8,8 +8,10 @@ const dataSourcePath = path.join(
   __dirname,
   '..',
   '..',
-  'configs',
-  'typeormDataSource.config.ts',
+  'shared',
+  'databases',
+  'typeorm',
+  'dataSource.ts',
 );
 
 const args = process.argv.slice(2);

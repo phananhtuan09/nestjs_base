@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
-import { typeOrmConfig } from './typeorm.config';
+import { typeOrmConfig } from '../../../configs/typeorm.config';
 import { DataSourceOptions } from 'typeorm';
-const typeOrmDataSource = new DataSource({
+const dataSource = new DataSource({
   ...(typeOrmConfig as DataSourceOptions),
 });
 
-export default typeOrmDataSource;
+export default dataSource;

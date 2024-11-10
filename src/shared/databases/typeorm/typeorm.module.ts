@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmLogger } from '~/common/middlewares/typeormLogger.middleware';
-import typeOrmDataSource from '~/configs/typeormDataSource.config';
+import dataSource from './dataSource';
 import { getEnvValue } from '~/common/utils/env.util';
 @Module({
   imports: [
@@ -15,9 +15,9 @@ import { getEnvValue } from '~/common/utils/env.util';
           // ignore
         }
 
-        await typeOrmDataSource.initialize();
+        await dataSource.initialize();
         return {
-          ...typeOrmDataSource.options,
+          ...dataSource.options,
           logging: loggerOptions,
           logger: new TypeOrmLogger(loggerOptions),
         };

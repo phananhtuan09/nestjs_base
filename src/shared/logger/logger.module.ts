@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import logger from '~/configs/logger.config';
+import logger from './logger.config';
 
 @Module({
   providers: [{ provide: 'Logger', useValue: logger }],

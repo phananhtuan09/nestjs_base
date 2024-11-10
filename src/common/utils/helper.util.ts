@@ -1,3 +1,5 @@
+import { isDev } from './env.util';
+
 export function isObject(obj: any) {
   return obj != null && obj?.constructor?.name === 'Object';
 }
@@ -28,7 +30,9 @@ export function convertToJSON(value: any) {
   try {
     return JSON.stringify(value, replacer);
   } catch (error) {
-    console.error('Error converting to JSON:', error);
+    if (isDev()) {
+      console.error('Error converting to JSON:', error);
+    }
     return null;
   }
 }

@@ -1,5 +1,5 @@
 import { AbstractLogger, LogLevel, LogMessage } from 'typeorm';
-import logger from '~/configs/logger.config';
+import logger from '~/shared/logger/logger.config';
 
 export class TypeOrmLogger extends AbstractLogger {
   /**
