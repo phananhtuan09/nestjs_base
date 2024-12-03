@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "isIn": "Giá trị của {property} phải nằm trong danh sách cho phép.",
+    "isBoolean": "Giá trị của {property} phải là kiểu boolean.",
+    "isDate": "Giá trị của {property} phải là ngày hợp lệ.",
+    "isString": "Giá trị của {property} phải là chuỗi.",
+    "isNumber": "Giá trị của {property} phải là số.",
+    "isInt": "Giá trị của {property} phải là số nguyên.",
+    "isArray": "Giá trị của {property} phải là một mảng.",
+    "isEnum": "Giá trị của {property} phải là giá trị hợp lệ của enum.",
+    "min": "Giá trị của {property} phải lớn hơn hoặc bằng {min}.",
+    "max": "Giá trị của {property} không được vượt quá {max}.",
+    "isEmail": "Giá trị của {property} phải là địa chỉ email hợp lệ.",
+    "IsNotEmpty": "Giá trị của {property} không được để trống.",
+    "maxLength": "Giá trị của {property} không được vượt quá {max} ký tự."
+  }
+}

@@ -9,8 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from '~/shared/entities/user.entity';
-import { ICommonResponse } from '~/common/types/response/common.type';
 import { CreateUserDto, UpdateUserDto, FilterUserDto } from './dto/user.dto';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -20,29 +18,22 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getUsers(
-    @Query() filters: FilterUserDto,
-  ): Promise<ICommonResponse<User[]>> {
+  async getUsers(@Query() filters: FilterUserDto) {
     return await this.userService.getUsers(filters);
   }
 
   @Post()
-  async createUser(
-    @Body() userData: CreateUserDto,
-  ): Promise<ICommonResponse<User>> {
+  async createUser(@Body() userData: CreateUserDto) {
     return await this.userService.createUser(userData);
   }
 
   @Put(':id')
-  async updateUser(
-    @Param('id') id: number,
-    @Body() updateData: UpdateUserDto,
-  ): Promise<void> {
+  async updateUser(@Param('id') id: number, @Body() updateData: UpdateUserDto) {
     await this.userService.updateUser(id, updateData);
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: number): Promise<void> {
+  async deleteUser(@Param('id') id: number) {
     await this.userService.deleteUser(id);
   }
 }

@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "isIn": "The value for {property} must be one of the allowed values.",
+    "isBoolean": "The value for {property} must be a boolean.",
+    "isDate": "The value for {property} must be a valid date.",
+    "isString": "The value for {property} must be a string.",
+    "isNumber": "The value for {property} must be a number.",
+    "isInt": "The value for {property} must be an integer.",
+    "isArray": "The value for {property} must be an array.",
+    "isEnum": "The value for {property} must be a valid enum value.",
+    "min": "The value for {property} must be at least {min}.",
+    "max": "The value for {property} must not exceed {max}.",
+    "isEmail": "The value for {property} must be a valid email address.",
+    "IsNotEmpty": "The value for {property} should not be empty.",
+    "maxLength": "The value for {property} must not exceed {max} characters."
+  }
+}

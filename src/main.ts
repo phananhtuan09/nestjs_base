@@ -8,16 +8,22 @@ import { join } from 'path';
 import * as express from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { validationExceptionFactory } from '~/common/pipes/validationException.factory';
+import { I18nService } from '~/shared/i18n/i18n.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const { port } = configService.get<AppConfigType>(appRegToken);
 
+  const i18nService = app.get(I18nService);
+
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
-      exceptionFactory: validationExceptionFactory,
+      exceptionFactory: (errors) =>
+        validationExceptionFactory(errors, i18nService),
+      whitelist: true,
+      enableDebugMessages: isDev(),
     }),
   );
 

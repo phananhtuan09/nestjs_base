@@ -1,4 +1,5 @@
 import { isDev } from './env.util';
+import { TypeOrmErrorCodes } from '../constants/common.const';
 
 export function isObject(obj: any) {
   return obj != null && obj?.constructor?.name === 'Object';
@@ -35,4 +36,33 @@ export function convertToJSON(value: any) {
     }
     return null;
   }
+}
+
+export function isTypeOrmError(error: any): boolean {
+  if (!error.stack) return false;
+  const errorCodes = Object.values(TypeOrmErrorCodes);
+  return errorCodes.some((code) => error.stack?.includes(code));
+}
+
+export function removeEmptyProperties(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj
+      .map(removeEmptyProperties)
+      .filter((v) => v !== null && v !== undefined && v !== '');
+  } else if (isObject(obj)) {
+    return Object.fromEntries(
+      Object.entries(obj)
+        .map(([key, value]) => [key, removeEmptyProperties(value)])
+        .filter(
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ([_, value]) => value !== null && value !== undefined && value !== '',
+        ),
+    );
+  }
+  return obj;
+}
+
+export function convertToNumber(value: any): number | null {
+  const number = Number(value);
+  return !isNaN(number) ? number : null;
 }

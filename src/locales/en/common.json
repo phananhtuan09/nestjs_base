@@ -1,3 +1,10 @@
 {
-  "about": "yogger chicken: a headless blog about"
+  "error": {
+    "default": "An unexpected error occurred.",
+    "validation_failed": "Validation of the request failed.",
+    "unauthorized": "You are not authorized to perform this action.",
+    "unauthenticated": "You need to log in to access this resource.",
+    "resource_not_found": "The requested resource could not be found.",
+    "database_error": "A database query failed."
+  }
 }

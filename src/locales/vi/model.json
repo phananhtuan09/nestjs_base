@@ -1,0 +1,15 @@
+{
+  "models": {
+    "user": "Người dùng"
+  },
+  "columns": {
+    "user": {
+      "id": "mã",
+      "username": "tên đăng nhập",
+      "email": "email",
+      "password": "mật khẩu",
+      "createdAt": "ngày tạo",
+      "updatedAt": "ngày cập nhật"
+    }
+  }
+}

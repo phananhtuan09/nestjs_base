@@ -1,6 +1,10 @@
 import { Global, Module } from '@nestjs/common';
 import { I18nService } from './i18n.service';
-import { I18nModule as NestI18nModule, QueryResolver } from 'nestjs-i18n';
+import {
+  I18nModule as NestI18nModule,
+  QueryResolver,
+  HeaderResolver,
+} from 'nestjs-i18n';
 import * as path from 'path';
 
 @Global()
@@ -16,7 +20,10 @@ import * as path from 'path';
         __dirname,
         '../../../src/common/types/i18n.generated.ts',
       ),
-      resolvers: [new QueryResolver(['lang'])],
+      resolvers: [
+        new QueryResolver(['lang']),
+        new HeaderResolver(['x-custom-lang']),
+      ],
     }),
   ],
   providers: [I18nService],

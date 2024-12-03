@@ -1,9 +1,21 @@
-import { IsString, IsEmail, IsOptional, IsInt, Min } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  MaxLength,
+} from 'class-validator';
 import { PartialType, OmitType, ApiProperty } from '@nestjs/swagger';
 
 export class BaseUserDto {
-  @IsString()
   @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(10, {
+    context: {
+      max: 10,
+    },
+  })
   username: string;
 
   @IsEmail()
@@ -12,6 +24,7 @@ export class BaseUserDto {
 
   @IsString()
   @ApiProperty()
+  @IsNotEmpty()
   password: string;
 }
 
@@ -23,8 +36,14 @@ export class FilterUserDto extends PartialType(
   OmitType(BaseUserDto, ['password'] as const),
 ) {
   @IsOptional()
-  @IsInt()
-  @Min(0)
   @ApiProperty({ required: false })
-  age?: number;
+  email?: string;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  page?: number;
+
+  @IsOptional()
+  @ApiProperty({ required: false })
+  pageSize?: number;
 }

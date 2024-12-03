@@ -1,36 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import {
-  ICommonResponse,
-  ICommonResponseErrors,
-  ICommonResponsePagination,
+  CommonResponse,
+  StatusResponse,
+  CodeResponse,
+  ResponseDataErrorOrFailed,
 } from '~/common/types/response/common.type';
 import { DEFAULT_RESPONSE } from '~/common/constants/common.const';
 import { IResponseHandlerService } from './responseHandler.interface';
 
 @Injectable()
 export class ResponseHandlerService implements IResponseHandlerService {
-  success<TData = any>(
+  public success<TData = any>(
     data: TData,
     message: string,
-    pagination?: ICommonResponsePagination,
-  ): ICommonResponse<TData> {
+  ): CommonResponse<TData> {
     return {
       ...DEFAULT_RESPONSE,
       data,
       message,
-      status: true,
-      pagination: pagination || null,
+      status: StatusResponse.success,
     };
   }
 
-  error(
+  public error(
     message: string,
-    errors?: ICommonResponseErrors[] | null | string,
-  ): ICommonResponse<null> {
+    error?: any,
+    code?: CodeResponse,
+    status?: StatusResponse,
+  ): CommonResponse<ResponseDataErrorOrFailed> {
     return {
       ...DEFAULT_RESPONSE,
       message,
-      errors: errors || null,
+      data: error || null,
+      status: status || StatusResponse.error,
+      code: code || CodeResponse.SERVER_UNEXPECTED_ERROR,
     };
   }
 }

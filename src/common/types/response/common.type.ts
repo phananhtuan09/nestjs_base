@@ -1,20 +1,45 @@
-export interface ICommonResponseErrors {
+export interface ValidateErrors {
   message: string;
-  field?: string;
-  code?: string;
+  property: string;
+  rule: string;
 }
 
-export interface ICommonResponsePagination {
+export interface ResponseDataErrorOrFailed {
+  stack?: string;
+  message?: string;
+  errors?: ValidateErrors[];
+}
+
+export interface PaginationResponse {
   page: number;
   pageSize: number;
-  totalCount: number;
+  totalItems: number;
   totalPages: number;
 }
 
-export interface ICommonResponse<TData = any> {
-  status: boolean;
+export interface PaginationQueryOptions {
+  page?: number | string;
+  pageSize?: number | string;
+}
+
+export enum StatusResponse {
+  success = 'success',
+  error = 'error',
+  failed = 'failed',
+}
+
+export enum CodeResponse {
+  SERVER_UNEXPECTED_ERROR = 'server_unexpected_error',
+  AUTHORIZATION_FAILED = 'authorization_failed',
+  AUTHENTICATED_FAILED = 'authenticated_failed',
+  RESOURCE_NOT_FOUND = 'resource_not_found',
+  REQUEST_VALIDATION_FAILED = 'request_validation_failed',
+  DATABASE_QUERY_FAILED = 'database_query_failed',
+}
+
+export interface CommonResponse<TData = any> {
+  status: StatusResponse;
   message: string;
-  data: null | TData;
-  errors?: null | ICommonResponseErrors[] | string;
-  pagination?: ICommonResponsePagination | null;
+  data: TData | null;
+  code: CodeResponse | null;
 }

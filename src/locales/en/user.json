@@ -1,0 +1,14 @@
+{
+  "success": {
+    "user_created": "User successfully created.",
+    "user_updated": "User successfully updated.",
+    "user_deleted": "User successfully deleted.",
+    "user_retrieved": "User data successfully retrieved."
+  },
+  "error": {
+    "user_not_created": "User created failed.",
+    "user_not_updated": "User updated failed.",
+    "user_not_deleted": "User deleted failed.",
+    "user_not_retrieved": "User data retrieved not found."
+  }
+}

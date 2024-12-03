@@ -1,0 +1,15 @@
+{
+  "models": {
+    "user": "User"
+  },
+  "columns": {
+    "user": {
+      "id": "id",
+      "username": "username",
+      "email": "email",
+      "password": "password",
+      "createdAt": "createdAt",
+      "updatedAt": "updatedAt"
+    }
+  }
+}
