@@ -11,7 +11,7 @@
     "min": "The value for {property} must be at least {min}.",
     "max": "The value for {property} must not exceed {max}.",
     "isEmail": "The value for {property} must be a valid email address.",
-    "IsNotEmpty": "The value for {property} should not be empty.",
+    "isNotEmpty": "The value for {property} should not be empty.",
     "maxLength": "The value for {property} must not exceed {max} characters."
   }
 }

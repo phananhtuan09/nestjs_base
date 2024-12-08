@@ -35,6 +35,9 @@ export enum CodeResponse {
   RESOURCE_NOT_FOUND = 'resource_not_found',
   REQUEST_VALIDATION_FAILED = 'request_validation_failed',
   DATABASE_QUERY_FAILED = 'database_query_failed',
+  USER_HAS_EXISTED = 'user_has_existed',
+  USER_NOT_FOUND = 'user_not_found',
+  ID_INVALID = 'id_invalid',
 }
 
 export interface CommonResponse<TData = any> {

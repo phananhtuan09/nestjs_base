@@ -68,4 +68,8 @@ export class BaseRepository<T extends HasId>
   public async delete(id: number): Promise<void> {
     await this.entity.delete(id);
   }
+
+  public createQueryBuilder(alias: string) {
+    return this.entity.createQueryBuilder(alias);
+  }
 }

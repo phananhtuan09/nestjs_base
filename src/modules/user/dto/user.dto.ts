@@ -1,49 +1,51 @@
+import { IsString, IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
 import {
-  IsString,
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  MaxLength,
-} from 'class-validator';
-import { PartialType, OmitType, ApiProperty } from '@nestjs/swagger';
-
+  PartialType,
+  OmitType,
+  ApiProperty,
+  IntersectionType,
+} from '@nestjs/swagger';
+import { PaginationDto } from '~/common/dto/common.dto';
 export class BaseUserDto {
   @ApiProperty()
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(10, {
-    context: {
-      max: 10,
-    },
-  })
   username: string;
 
-  @IsEmail()
   @ApiProperty()
+  @IsString()
   email: string;
 
-  @IsString()
   @ApiProperty()
-  @IsNotEmpty()
+  @IsString()
   password: string;
 }
 
-export class CreateUserDto extends BaseUserDto {}
+export class CreateOrUpdateDto extends BaseUserDto {
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(20, { context: { max: 20 } })
+  username: string;
 
-export class UpdateUserDto extends PartialType(BaseUserDto) {}
+  @IsNotEmpty()
+  @IsString()
+  @IsEmail()
+  @MaxLength(100, { context: { max: 100 } })
+  email: string;
 
-export class FilterUserDto extends PartialType(
-  OmitType(BaseUserDto, ['password'] as const),
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(255, { context: { max: 255 } })
+  password: string;
+}
+
+export class CreateUserDto extends CreateOrUpdateDto {}
+
+export class UpdateUserDto extends PartialType(CreateOrUpdateDto) {}
+
+export class GetUsersDto extends IntersectionType(
+  PartialType(OmitType(BaseUserDto, ['password'] as const)),
+  PaginationDto,
 ) {
-  @IsOptional()
   @ApiProperty({ required: false })
   email?: string;
-
-  @IsOptional()
-  @ApiProperty({ required: false })
-  page?: number;
-
-  @IsOptional()
-  @ApiProperty({ required: false })
-  pageSize?: number;
 }

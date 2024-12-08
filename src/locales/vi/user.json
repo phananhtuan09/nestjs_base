@@ -1,14 +1,16 @@
 {
   "success": {
-    "user_created": "Người dùng đã được tạo thành công.",
-    "user_updated": "Người dùng đã được cập nhật thành công.",
-    "user_deleted": "Người dùng đã được xóa thành công.",
-    "user_retrieved": "Dữ liệu người dùng đã được lấy thành công."
+    "userCreated": "Người dùng đã được tạo thành công.",
+    "userUpdated": "Người dùng đã được cập nhật thành công.",
+    "userDeleted": "Người dùng đã được xóa thành công.",
+    "userRetrieved": "Dữ liệu người dùng đã được lấy thành công."
   },
   "error": {
-    "user_not_created": "Không thể tạo người dùng.",
-    "user_not_updated": "Không thể cập nhật người dùng.",
-    "user_not_deleted": "Không thể xóa người dùng.",
-    "user_not_retrieved": "Không tìm thấy dữ liệu người dùng."
+    "userCreated": "Không thể tạo người dùng.",
+    "userUpdated": "Không thể cập nhật người dùng.",
+    "userDeleted": "Không thể xóa người dùng.",
+    "userRetrieved": "Không tìm thấy dữ liệu người dùng.",
+    "userHasExisted": "Người dùng đã tồn tại.",
+    "userNotFound": "Không tìm thấy người dùng."
   }
 }

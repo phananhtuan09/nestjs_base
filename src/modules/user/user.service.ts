@@ -1,15 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { Like } from 'typeorm';
 import { UserRepository } from '~/common/repositories/user.repository';
-import { User } from '~/shared/entities/user.entity';
 import { ResponseHandlerService } from '~/shared/handlers/response/responseHandler.service';
-import { CommonResponse } from '~/common/types/response/common.type';
-import { CreateUserDto, UpdateUserDto, FilterUserDto } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto, GetUsersDto } from './dto/user.dto';
 import { I18nService } from '~/shared/i18n/i18n.service';
 import { I18nReturnType } from '~/shared/i18n/i18n.interface';
 import { ErrorHttpException } from '~/common/exceptions/error.exception';
-import { removeEmptyProperties } from '~/common/utils/helper.util';
-import { WrapDataWithPagination } from '~/common/types/mappedtypes';
+import { FailedHttpException } from '~/common/exceptions/failed.exception';
+import { CodeResponse } from '~/common/types/response/common.type';
+import { QueryBuilderHandlerService } from '~/shared/handlers/queryBuilder/queryBuilderHandler.service';
+import { User } from '~/shared/entities/user.entity';
+import { WhereType } from '~/shared/handlers/queryBuilder/queryBuilderHandler.interface';
 
 @Injectable()
 export class UserService {
@@ -17,9 +18,23 @@ export class UserService {
     private readonly userRepository: UserRepository,
     private readonly responseHandler: ResponseHandlerService,
     private readonly i18nService: I18nService,
+    private readonly queryBuilderHandler: QueryBuilderHandlerService<User>,
   ) {}
 
-  async createUser(userData: CreateUserDto): Promise<CommonResponse<any>> {
+  async createUser(userData: CreateUserDto) {
+    const existedUser = await this.userRepository.findOne({
+      where: [{ email: userData.email }, { username: userData.username }],
+    });
+    if (existedUser) {
+      throw new FailedHttpException(
+        this.i18nService.t<I18nReturnType<'user.error.userHasExisted'>>(
+          'user.error.userHasExisted',
+        ),
+        null,
+        CodeResponse.USER_HAS_EXISTED,
+        HttpStatus.CONFLICT,
+      );
+    }
     try {
       const user = this.userRepository.create(userData);
       const savedUser = await this.userRepository.save(user);
@@ -27,39 +42,34 @@ export class UserService {
         {
           user: savedUser,
         },
-        this.i18nService.t<I18nReturnType<'user.success.user_created'>>(
-          'user.success.user_created',
+        this.i18nService.t<I18nReturnType<'user.success.userCreated'>>(
+          'user.success.userCreated',
         ),
       );
     } catch (error) {
       throw new ErrorHttpException(
-        this.i18nService.t<I18nReturnType<'user.error.user_not_created'>>(
-          'user.error.user_not_created',
+        this.i18nService.t<I18nReturnType<'user.error.userCreated'>>(
+          'user.error.userCreated',
         ),
         error,
       );
     }
   }
 
-  async getUsers(
-    filters: FilterUserDto,
-  ): Promise<CommonResponse<WrapDataWithPagination<'users', User[]>>> {
+  async getUsers(filters: GetUsersDto) {
     try {
-      const formattedFilters = removeEmptyProperties(filters) as FilterUserDto;
       const { data, pagination } = await this.userRepository.findMany(
         {
           where: {
-            ...(formattedFilters?.email
-              ? { email: Like(`%${formattedFilters.email}%`) }
-              : null),
-            ...(formattedFilters?.username
-              ? { username: Like(`%${formattedFilters.username}%`) }
+            ...(filters.email ? { email: Like(`%${filters.email}%`) } : null),
+            ...(filters.username
+              ? { username: Like(`%${filters.username}%`) }
               : null),
           },
         },
         {
-          page: formattedFilters.page,
-          pageSize: formattedFilters.pageSize,
+          page: filters.page,
+          pageSize: filters.pageSize,
         },
       );
 
@@ -68,55 +78,118 @@ export class UserService {
           users: data,
           pagination,
         },
-        this.i18nService.t<I18nReturnType<'user.success.user_retrieved'>>(
-          'user.success.user_retrieved',
+        this.i18nService.t<I18nReturnType<'user.success.userRetrieved'>>(
+          'user.success.userRetrieved',
         ),
       );
     } catch (error) {
       throw new ErrorHttpException(
-        this.i18nService.t<I18nReturnType<'user.error.user_not_retrieved'>>(
-          'user.error.user_not_retrieved',
+        this.i18nService.t<I18nReturnType<'user.error.userRetrieved'>>(
+          'user.error.userRetrieved',
         ),
         error,
       );
     }
   }
 
-  async updateUser(
-    id: number,
-    updateData: UpdateUserDto,
-  ): Promise<CommonResponse<void>> {
+  async updateUser(id: number, updateData: UpdateUserDto) {
+    const userUpdated = await this.userRepository.findOneById(id);
+    if (!userUpdated) {
+      throw new FailedHttpException(
+        this.i18nService.t<I18nReturnType<'user.error.userNotFound'>>(
+          'user.error.userNotFound',
+        ),
+        null,
+        CodeResponse.USER_NOT_FOUND,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const conditionCheckExist = [];
+    if (updateData.email) {
+      conditionCheckExist.push({
+        field: 'user.email',
+        name: 'email',
+        value: updateData.email,
+        operator: '=',
+        typeWhere: WhereType.OR_WHERE,
+      });
+    }
+    if (updateData.username) {
+      conditionCheckExist.push({
+        field: 'user.username',
+        name: 'username',
+        value: updateData.username,
+        operator: '=',
+        typeWhere: WhereType.OR_WHERE,
+      });
+    }
+    if (conditionCheckExist.length > 0) {
+      const userQueryBuilder = this.userRepository.createQueryBuilder('user');
+      userQueryBuilder.where('user.id != :id', { id });
+      this.queryBuilderHandler.handle(userQueryBuilder, {
+        AND: conditionCheckExist,
+      });
+      const existedUser = await userQueryBuilder.getOne();
+      if (existedUser) {
+        throw new FailedHttpException(
+          this.i18nService.t<I18nReturnType<'user.error.userHasExisted'>>(
+            'user.error.userHasExisted',
+          ),
+          null,
+          CodeResponse.USER_HAS_EXISTED,
+          HttpStatus.CONFLICT,
+        );
+      }
+    }
+
     try {
       await this.userRepository.update(id, updateData);
       return this.responseHandler.success(
-        null,
-        this.i18nService.t<I18nReturnType<'user.success.user_updated'>>(
-          'user.success.user_updated',
+        {
+          user: {
+            ...userUpdated,
+            ...updateData,
+          },
+        },
+        this.i18nService.t<I18nReturnType<'user.success.userUpdated'>>(
+          'user.success.userUpdated',
         ),
       );
     } catch (error) {
       throw new ErrorHttpException(
-        this.i18nService.t<I18nReturnType<'user.error.user_not_updated'>>(
-          'user.error.user_not_updated',
+        this.i18nService.t<I18nReturnType<'user.error.userUpdated'>>(
+          'user.error.userUpdated',
         ),
         error,
       );
     }
   }
 
-  async deleteUser(id: number): Promise<CommonResponse<void>> {
+  async deleteUser(id: number) {
+    const userDeleted = await this.userRepository.findOneById(id);
+    if (!userDeleted) {
+      throw new FailedHttpException(
+        this.i18nService.t<I18nReturnType<'user.error.userNotFound'>>(
+          'user.error.userNotFound',
+        ),
+        null,
+        CodeResponse.USER_NOT_FOUND,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
     try {
       await this.userRepository.delete(id);
       return this.responseHandler.success(
-        null,
-        this.i18nService.t<I18nReturnType<'user.success.user_deleted'>>(
-          'user.success.user_deleted',
+        true,
+        this.i18nService.t<I18nReturnType<'user.success.userDeleted'>>(
+          'user.success.userDeleted',
         ),
       );
     } catch (error) {
       throw new ErrorHttpException(
-        this.i18nService.t<I18nReturnType<'user.error.user_not_deleted'>>(
-          'user.error.user_not_deleted',
+        this.i18nService.t<I18nReturnType<'user.error.userDeleted'>>(
+          'user.error.userDeleted',
         ),
         error,
       );

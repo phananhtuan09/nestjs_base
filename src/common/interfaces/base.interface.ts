@@ -1,4 +1,9 @@
-import { DeepPartial, FindManyOptions, FindOptions } from 'typeorm';
+import {
+  DeepPartial,
+  FindManyOptions,
+  FindOptions,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { DataWithPagination } from '~/common/paginate/interface';
 
 export interface BaseInterfaceRepository<T> {
@@ -9,4 +14,5 @@ export interface BaseInterfaceRepository<T> {
   update(id: number, entity: DeepPartial<T>): Promise<void>;
   delete(id: number): Promise<void>;
   save(data: DeepPartial<T>): Promise<T>;
+  createQueryBuilder(alias: string): SelectQueryBuilder<T>;
 }

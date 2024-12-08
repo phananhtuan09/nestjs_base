@@ -1,14 +1,16 @@
 {
   "success": {
-    "user_created": "User successfully created.",
-    "user_updated": "User successfully updated.",
-    "user_deleted": "User successfully deleted.",
-    "user_retrieved": "User data successfully retrieved."
+    "userCreated": "User successfully created.",
+    "userUpdated": "User successfully updated.",
+    "userDeleted": "User successfully deleted.",
+    "userRetrieved": "User data successfully retrieved."
   },
   "error": {
-    "user_not_created": "User created failed.",
-    "user_not_updated": "User updated failed.",
-    "user_not_deleted": "User deleted failed.",
-    "user_not_retrieved": "User data retrieved not found."
+    "userCreated": "User created failed.",
+    "userUpdated": "User updated failed.",
+    "userDeleted": "User deleted failed.",
+    "userRetrieved": "User data retrieved not found.",
+    "userHasExisted": "User has existed.",
+    "userNotFound": "User not found."
   }
 }

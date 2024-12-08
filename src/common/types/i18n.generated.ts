@@ -32,16 +32,18 @@ export type I18nTranslations = {
     };
     "user": {
         "success": {
-            "user_created": string;
-            "user_updated": string;
-            "user_deleted": string;
-            "user_retrieved": string;
+            "userCreated": string;
+            "userUpdated": string;
+            "userDeleted": string;
+            "userRetrieved": string;
         };
         "error": {
-            "user_not_created": string;
-            "user_not_updated": string;
-            "user_not_deleted": string;
-            "user_not_retrieved": string;
+            "userCreated": string;
+            "userUpdated": string;
+            "userDeleted": string;
+            "userRetrieved": string;
+            "userHasExisted": string;
+            "userNotFound": string;
         };
     };
     "validation": {
@@ -57,7 +59,7 @@ export type I18nTranslations = {
             "min": string;
             "max": string;
             "isEmail": string;
-            "IsNotEmpty": string;
+            "isNotEmpty": string;
             "maxLength": string;
         };
     };

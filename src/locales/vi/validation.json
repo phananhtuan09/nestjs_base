@@ -11,7 +11,7 @@
     "min": "Giá trị của {property} phải lớn hơn hoặc bằng {min}.",
     "max": "Giá trị của {property} không được vượt quá {max}.",
     "isEmail": "Giá trị của {property} phải là địa chỉ email hợp lệ.",
-    "IsNotEmpty": "Giá trị của {property} không được để trống.",
+    "isNotEmpty": "Giá trị của {property} không được để trống.",
     "maxLength": "Giá trị của {property} không được vượt quá {max} ký tự."
   }
 }

@@ -39,7 +39,9 @@ export function convertToJSON(value: any) {
 }
 
 export function isTypeOrmError(error: any): boolean {
-  if (!error.stack) return false;
+  if (!error?.stack) {
+    return false;
+  }
   const errorCodes = Object.values(TypeOrmErrorCodes);
   return errorCodes.some((code) => error.stack?.includes(code));
 }
@@ -65,4 +67,8 @@ export function removeEmptyProperties(obj: any): any {
 export function convertToNumber(value: any): number | null {
   const number = Number(value);
   return !isNaN(number) ? number : null;
+}
+
+export function isNumber(value: any): boolean {
+  return typeof value === 'number' && !isNaN(value);
 }
