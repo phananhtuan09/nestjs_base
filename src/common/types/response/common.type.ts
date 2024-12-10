@@ -37,6 +37,7 @@ export enum CodeResponse {
   DATABASE_QUERY_FAILED = 'database_query_failed',
   USER_HAS_EXISTED = 'user_has_existed',
   USER_NOT_FOUND = 'user_not_found',
+  USER_UNAUTHORIZED = 'user_unauthorized',
   ID_INVALID = 'id_invalid',
 }
 

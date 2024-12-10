@@ -82,3 +82,11 @@ export enum TypeOrmErrorCodes {
   TypeORMError = 'TypeORMError',
   ForbiddenTransactionModeOverrideError = 'ForbiddenTransactionModeOverrideError',
 }
+
+export const BASE_TYPE_NAMES = [
+  'String',
+  'Number',
+  'Boolean',
+  'Array',
+  'Object',
+];

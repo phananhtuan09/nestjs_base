@@ -2,8 +2,15 @@ import { SwaggerConfigType, swaggerRegToken } from '~/configs/swagger.config';
 import { ConfigService } from '@nestjs/config';
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Response, ResponsePagination } from '~/shared/model/response.model';
 import * as fs from 'fs';
 import { join } from 'path';
+import {
+  GLOBAL_PARAMETERS,
+  SWAGGER_DESCRIPTION,
+  SWAGGER_PATH,
+  SWAGGER_TITLE,
+} from '../constants/swagger.const';
 
 export function setupSwagger(
   app: INestApplication,
@@ -14,25 +21,17 @@ export function setupSwagger(
   if (!enable) {
     return;
   }
+
   const config = new DocumentBuilder()
-    .addGlobalParameters(
-      {
-        name: 'lang',
-        in: 'query',
-        required: false,
-      },
-      {
-        name: 'version',
-        in: 'query',
-        required: false,
-      },
-    )
-    .setTitle('Nestjs Base API Documentation')
-    .setDescription('Description')
+    .addGlobalParameters(...GLOBAL_PARAMETERS)
+    .setTitle(SWAGGER_TITLE)
+    .setDescription(SWAGGER_DESCRIPTION)
     .setVersion(version)
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('/swagger', app, document, {
+  const document = SwaggerModule.createDocument(app, config, {
+    extraModels: [Response, ResponsePagination],
+  });
+  SwaggerModule.setup(SWAGGER_PATH, app, document, {
     customJs: '/public/swagger-add-download-link.js',
   });
 

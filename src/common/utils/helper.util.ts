@@ -1,8 +1,8 @@
 import { isDev } from './env.util';
 import { TypeOrmErrorCodes } from '../constants/common.const';
 
-export function isObject(obj: any) {
-  return obj != null && obj?.constructor?.name === 'Object';
+export function isObject(value: any) {
+  return Object.prototype.toString.call(value) === '[object Object]';
 }
 
 export function convertToJSON(value: any) {

@@ -9,6 +9,7 @@ import * as express from 'express';
 import { ValidationPipe } from '@nestjs/common';
 import { validationExceptionFactory } from '~/common/pipes/validationException.factory';
 import { I18nService } from '~/shared/i18n/i18n.service';
+import { SWAGGER_API_ROOT } from './common/constants/swagger.const';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,7 +18,7 @@ async function bootstrap() {
 
   const i18nService = app.get(I18nService);
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix(SWAGGER_API_ROOT);
   app.useGlobalPipes(
     new ValidationPipe({
       exceptionFactory: (errors) =>
